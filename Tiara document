@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Tiara Dossier</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.5in;
+        }
+        
+        @font-face {
+            font-family: 'Cormorant';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cormorant', 'Baskerville', 'Garamond', 'Times New Roman', serif;
+            color: #2a2a2a;
+            background-color: #f8f6f0;
+        }
+        
+        .page {
+            width: 8.5in;
+            height: 11in;
+            margin: 0 auto;
+            padding: 0.75in;
+            box-sizing: border-box;
+            position: relative;
+            background-color: #f8f6f0;
+            border: 1px solid #e9e5dc;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+            overflow: hidden;
+        }
+        
+        .page::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><path d="M200,50 C125,50 50,125 50,200 C50,275 125,350 200,350 C275,350 350,275 350,200 C350,125 275,50 200,50 Z" fill="none" stroke="%23c0a080" stroke-width="1" opacity="0.1"/></svg>');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 80%;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .page-border {
+            position: absolute;
+            top: 0.4in;
+            left: 0.4in;
+            right: 0.4in;
+            bottom: 0.4in;
+            border: 1px solid rgba(192, 160, 128, 0.3);
+            pointer-events: none;
+        }
+        
+        .page-border-inner {
+            position: absolute;
+            top: 0.5in;
+            left: 0.5in;
+            right: 0.5in;
+            bottom: 0.5in;
+            border: 1px solid rgba(192, 160, 128, 0.2);
+            pointer-events: none;
+        }
+        
+        .page-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+        
+        .first-page .header {
+            text-align: center;
+            margin-bottom: 1.5in;
+            position: relative;
+        }
+        
+        .first-page .page-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cover-emblem {
+            width: 2in;
+            height: 2in;
+            margin-bottom: 1in;
+            position: relative;
+        }
+        
+        .emblem-circle {
+            stroke: #8b7355;
+            fill: none;
+            stroke-width: 1;
+        }
+        
+        .emblem-inner {
+            stroke: #8b7355;
+            fill: none;
+            stroke-width: 0.5;
+        }
+        
+        .ornate-border {
+            position: absolute;
+            top: 0.25in;
+            left: 0.25in;
+            right: 0.25in;
+            bottom: 0.25in;
+            border: 3px double #c0a080;
+            z-index: -1;
+        }
+        
+        .classified-stamp {
+            position: absolute;
+            top: 1in;
+            right: 0.5in;
+            transform: rotate(15deg);
+            color: rgba(153, 0, 0, 0.7);
+            border: 3px solid rgba(153, 0, 0, 0.7);
+            padding: 8px 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #8b7355;
+            margin: 0;
+            padding: 0;
+            font-family: 'Trajan Pro', 'Times New Roman', serif;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #8b7355;
+            font-style: italic;
+            margin: 0.8rem 0 0;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+        
+        .title-divider {
+            margin: 1rem auto;
+            width: 3in;
+            height: 1px;
+            background: linear-gradient(to right, rgba(192, 160, 128, 0), rgba(192, 160, 128, 0.8), rgba(192, 160, 128, 0));
+            border: none;
+        }
+        
+        .royal-crest {
+            width: 1.5in;
+            margin: 0.5in auto;
+        }
+        
+        .cover-footer {
+            margin-top: 1.5in;
+            font-style: italic;
+            color: #8b7355;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .page-heading {
+            text-align: center;
+            padding-bottom: 0.3in;
+            margin-bottom: 0.4in;
+            border-bottom: 1px solid rgba(192, 160, 128, 0.4);
+        }
+        
+        .heading-title {
+            font-size: 1.2rem;
+            color: #8b7355;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        
+        .intro {
+            text-align: center;
+            font-style: italic;
+            margin: 0 auto 1.5in;
+            max-width: 5.5in;
+            line-height: 1.6;
+            color: #5D4037;
+            font-size: 0.9rem;
+        }
+        
+        .tiara {
+            margin-bottom: 0.5in;
+            position: relative;
+            break-inside: avoid;
+        }
+        
+        .tiara-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.2in;
+            padding-bottom: 0.1in;
+            border-bottom: 1px solid rgba(192, 160, 128, 0.4);
+        }
+        
+        .tiara-name {
+            font-size: 1.3rem;
+            color: #8b7355;
+            margin: 0;
+            font-family: 'Trajan Pro', 'Times New Roman', serif;
+            letter-spacing: 1px;
+        }
+        
+        .tiara-maker {
+            font-style: italic;
+            color: #8D6E63;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+        
+        .tiara-date {
+            font-size: 0.8rem;
+            color: #8D6E63;
+            margin-top: 0.05in;
+            font-style: italic;
+        }
+        
+        .tiara-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.2in;
+            margin-top: 0.1in;
+        }
+        
+        .tiara-detail {
+            margin-bottom: 0.1in;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            color: #5D4037;
+            margin-bottom: 0.05in;
+            font-size: 0.8rem;
+        }
+        
+        .detail-content {
+            line-height: 1.4;
+            font-size: 0.85rem;
+        }
+        
+        .first-worn {
+            margin-top: 0.2in;
+            font-style: italic;
+            color: #5D4037;
+            font-size: 0.85rem;
+        }
+        
+        .secret-meaning {
+            margin-top: 0.2in;
+            padding: 0.2in;
+            background-color: rgba(192, 160, 128, 0.05);
+            border-left: 2px solid #c0a080;
+        }
+        
+        .secret-title {
+            font-weight: bold;
+            color: #5D4037;
+            margin-bottom: 0.1in;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .secret-title:before {
+            content: "✦";
+            margin-right: 0.1in;
+            color: #c0a080;
+        }
+        
+        .secret-meaning p {
+            margin: 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 0.4in;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8b7355;
+            font-style: italic;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 0.75in;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #8D6E63;
+            border-top: 1px solid rgba(192, 160, 128, 0.3);
+            padding-top: 0.1in;
+        }
+        
+        .watermark {
+            position: absolute;
+            bottom: 1.5in;
+            right: 1in;
+            transform: rotate(-25deg);
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .watermark svg {
+            width: 2in;
+            height: 2in;
+        }
+        
+        .corner-ornament {
+            position: absolute;
+            width: 0.5in;
+            height: 0.5in;
+            opacity: 0.4;
+        }
+        
+        .corner-tl {
+            top: 0.4in;
+            left: 0.4in;
+            transform: rotate(0deg);
+        }
+        
+        .corner-tr {
+            top: 0.4in;
+            right: 0.4in;
+            transform: rotate(90deg);
+        }
+        
+        .corner-bl {
+            bottom: 0.4in;
+            left: 0.4in;
+            transform: rotate(-90deg);
+        }
+        
+        .corner-br {
+            bottom: 0.4in;
+            right: 0.4in;
+            transform: rotate(180deg);
+        }
+        
+        @media print {
+            body {
+                background: none;
+            }
+            
+            .page {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0.75in;
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="page first-page">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner-ornament corner-tl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-tr">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-bl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-br">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        
+        <div class="classified-stamp">Classified</div>
+        <div class="ornate-border"></div>
+        
+        <div class="page-content">
+            <div class="cover-emblem">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" class="emblem-circle"/>
+                    <circle cx="100" cy="100" r="80" class="emblem-inner"/>
+                    <path d="M100,30 L115,80 L170,80 L125,110 L140,160 L100,130 L60,160 L75,110 L30,80 L85,80 Z" fill="none" stroke="#8b7355" stroke-width="1"/>
+                    <circle cx="100" cy="100" r="25" fill="none" stroke="#8b7355" stroke-width="0.8"/>
+                    <text x="100" y="105" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="16">LC</text>
+                </svg>
+            </div>
+            
+            <h1 class="title">The Tiara Dossier</h1>
+            <hr class="title-divider">
+            <h2 class="subtitle">Royal Collection Registry</h2>
+            
+            <div class="royal-crest">
+                <svg viewBox="0 0 150 100">
+                    <path d="M75,10 C40,10 10,30 10,60 C10,90 40,90 75,90 C110,90 140,90 140,60 C140,30 110,10 75,10 Z" fill="none" stroke="#8b7355" stroke-width="1"/>
+                    <path d="M75,20 L85,40 L105,40 L90,55 L95,75 L75,65 L55,75 L60,55 L45,40 L65,40 Z" fill="none" stroke="#8b7355" stroke-width="0.8"/>
+                    <text x="75" y="50" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="8">HOUSE OF</text>
+                    <text x="75" y="62" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="12">LA CALAÍS</text>
+                </svg>
+            </div>
+            
+            <div class="cover-footer">
+                Archival Reference: TRC-1865-28<br>
+                Private Collection Documentation
+            </div>
+        </div>
+        
+        <div class="footer">
+            This document is classified. Unauthorized access or reproduction is strictly prohibited.
+        </div>
+        
+        <div class="page-number">i</div>
+    </div>
+
+    <!-- Introduction Page -->
+    <div class="page">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner-ornament corner-tl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-tr">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-bl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-br">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        
+        <div class="watermark">
+            <svg viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#8b7355" stroke-width="1"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#8b7355" stroke-width="0.5"/>
+                <text x="100" y="85" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">ROYAL HOUSE</text>
+                <text x="100" y="105" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">OF</text>
+                <text x="100" y="125" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">LA CALAÍS</text>
+            </svg>
+        </div>
+        
+        <div class="page-content">
+            <div class="page-heading">
+                <h2 class="heading-title">Introduction</h2>
+            </div>
+            
+            <div class="intro">
+                <p>This classified document contains detailed information regarding the House of La Calaís' official tiara collection. This heritage collection represents over two centuries of royal craftsmanship and historical significance.</p>
+                
+                <p>Each tiara within this collection has been meticulously documented, including its design provenance, appropriate ceremonial usage, and the secret symbolism embedded within its construction. The information contained herein is considered privileged and is to be shared only with authorized members of the royal household and trusted custodians of the collection.</p>
+                
+                <p>The tiara collection serves not merely as adornment but as physical embodiment of the House's history, alliances, and sovereign authority. Each piece contains elements that communicate specific meanings understood only by those with knowledge of the House's private historical records.</p>
+                
+                <p>This document details which events each tiara should be worn for (such as weddings, concerts, and state visits), their original creators (many of whom are master jewelers from houses including Garrard, Van Cleef & Arpels, Boucheron, Cartier, and Fabergé), and the secret design meanings embedded within the craftsmanship.</p>
+                
+                <p>Proper use and care of these historical treasures is essential to preserving not only their material value but their cultural and symbolic significance for future generations of the royal lineage.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            This document is classified. Unauthorized access or reproduction is strictly prohibited.
+        </div>
+        
+        <div class="page-number">ii</div>
+    </div>
+
+    <!-- Tiara Pages -->
+    <div class="page">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner-ornament corner-tl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-tr">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-bl">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        <div class="corner-ornament corner-br">
+            <svg viewBox="0 0 50 50">
+                <path d="M0,0 L15,0 Q30,0 30,15 L30,30 Q15,30 0,15 Z" fill="none" stroke="#c0a080" stroke-width="0.5"/>
+                <path d="M5,5 L12,5 Q20,5 20,12 L20,20 Q12,20 5,12 Z" fill="none" stroke="#c0a080" stroke-width="0.3"/>
+            </svg>
+        </div>
+        
+        <div class="watermark">
+            <svg viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#8b7355" stroke-width="1"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#8b7355" stroke-width="0.5"/>
+                <text x="100" y="85" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">ROYAL HOUSE</text>
+                <text x="100" y="105" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">OF</text>
+                <text x="100" y="125" text-anchor="middle" fill="#8b7355" font-family="serif" font-size="14">LA CALAÍS</text>
+            </svg>
+        </div>
+        
+        <div class="page-content">
+            <div class="page-heading">
+                <h2 class="heading-title">The Royal Tiara Collection</h2>
+            </div>
+            
+            <div class="tiara">
+                <div class="tiara-header">
+                    <div>
+                        <h3 class="tiara-name">The Celestial Diadem</h3>
+                        <div class="tiara-date">Created 1815</div>
+                    </div>
+                    <div class="tiara-maker">
+                        <p>Fabergé</p>
+                    </div>
+                </div>
+                
+                <div class="tiara-details">
+                    <div class="tiara-detail">
+                        <div class="detail-title">Materials</div>
+                        <div class="detail-content">Platinum, diamonds, sapphires, white moonstone</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Designated Occasions</div>
+                        <div class="detail-content">State visits, Royal wedding ceremonies, Coronations</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Design</div>
+                        <div class="detail-content">Star and crescent motifs with graduated diamond peaks, central sapphire of 23 carats</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Storage Location</div>
+                        <div class="detail-content">Royal Treasury Vault, Section A, Case 3</div>
+                    </div>
+                </div>
+                
+                <div class="first-worn">
+                    First worn by Sofia I de Calaís (Grand Duchess, born 1817)
+                </div>
+                
+                <div class="secret-meaning">
+                    <div class="secret-title">Secret Meaning</div>
+                    <p>The seven stars symbolize divine protection, while the sapphire represents loyalty to the crown. The curved structure is designed to echo the House's ancestral castle silhouette. When illuminated by candlelight, the arrangement of stones creates a shadow pattern that matches the constellation visible on the night of the House's founding.</p>
+                </div>
+            </div>
+            
+            <div class="tiara">
+                <div class="tiara-header">
+                    <div>
+                        <h3 class="tiara-name">The Laurel Wreath Tiara</h3>
+                        <div class="tiara-date">Created 1738, Restored 1892</div>
+                    </div>
+                    <div class="tiara-maker">
+                        <p>Garrard</p>
+                    </div>
+                </div>
+                
+                <div class="tiara-details">
+                    <div class="tiara-detail">
+                        <div class="detail-title">Materials</div>
+                        <div class="detail-content">Gold, silver, diamonds, emeralds</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Designated Occasions</div>
+                        <div class="detail-content">Garden parties, Cultural events, Art exhibitions</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Design</div>
+                        <div class="detail-content">Naturalistic laurel leaves with berry clusters of pavé diamonds, detachable emerald drops</div>
+                    </div>
+                    
+                    <div class="tiara-detail">
+                        <div class="detail-title">Storage Location</div>
+                        <div class="detail-content">Royal Treasury Vault, Section B, Case 1</div>
+                    </div>
+                </div>
+                
+                <div class="first-worn">
+                    First worn by Princess Maria Barbara of Castamar (born into family: born 1740)
+                </div>
+                
+                <div class="secret-meaning">
+                    <div class="secret-title">Secret Meaning</div>
+                    <p>The laurel represents victory and peace. Original documentation reveals secret compartments beneath three of the larger leaves, historically used to transport confidential messages during times of political upheaval. The number of emerald drops (seven) corresponds to the seven valleys of the family's ancestral lands.</p>
+                </div>
+            </div>
+        </div
